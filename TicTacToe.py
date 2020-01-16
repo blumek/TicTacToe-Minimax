@@ -28,7 +28,7 @@ class TicTacToe:
 
         self.board[row][col] = self.__turn
         if self.__judge.is_any_winner():
-            self.__winner = self.__turn
+            self.__winner = self.__judge.get_winner()
             self.__state = GameState.FINISHED
         elif self.__judge.is_board_filled():
             self.__state = GameState.FINISHED

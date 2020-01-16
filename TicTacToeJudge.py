@@ -38,8 +38,8 @@ class TicTacToeJudge:
     def __is_any_col_winner(self):
         for i in range(len(self.board)):
             col_value = 0
-            for j in range(len(self.board[i])):
-                col_value += self.board[i][j]
+            for j in range(len(self.board)):
+                col_value += self.board[j][i]
             if self.__is_col_winner(col_value):
                 return True
         return False
@@ -67,3 +67,32 @@ class TicTacToeJudge:
     def __is_diagonal_winner(diagonal_value):
         return diagonal_value == 1 * 3 or \
                diagonal_value == -1 * 3
+
+    def get_winner(self):
+        for row in self.board:
+            row_sum = sum(row)
+            if row_sum == 3:
+                return 1
+            elif row_sum == -3:
+                return -1
+
+        for i in range(len(self.board)):
+            col_value = 0
+            for j in range(len(self.board)):
+                col_value += self.board[j][i]
+            if col_value == 3:
+                return 1
+            elif col_value == -3:
+                return -1
+
+        first_diagonal_value = 0
+        second_diagonal_value = 0
+        for i in range(len(self.board)):
+            first_diagonal_value += self.board[i][i]
+            second_diagonal_value += self.board[len(self.board) - 1 - i][i]
+        if first_diagonal_value == 3 or second_diagonal_value == 3:
+            return 1
+        elif first_diagonal_value == -3 or second_diagonal_value == -3:
+            return -1
+
+        return 0
