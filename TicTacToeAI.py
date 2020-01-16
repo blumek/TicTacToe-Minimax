@@ -9,7 +9,7 @@ class TicTacToeAI:
         self.board = board
         self.__judge = TicTacToeJudge(self.board)
 
-    def next_move(self):
+    def get_next_move_cell(self):
         max_ = -math.inf
         pos = None
 
@@ -18,11 +18,11 @@ class TicTacToeAI:
                 if self.board[row][col] != 0:
                     continue
                 self.board[row][col] = 1
-                eval_ = self.minimax_maximizing_player()
+                eval_ = self.minimax_minimizing_player()
                 self.board[row][col] = 0
                 if eval_ > max_:
                     max_ = eval_
-                    pos = (row, col)
+                    pos = row, col
 
         return pos
 
@@ -43,13 +43,7 @@ class TicTacToeAI:
         return max_eval
 
     def get_weight(self):
-        weight = self.__judge.get_winner()
-        if weight == TicTacToe.PLAYER_ONE:
-            return -1
-        elif weight == TicTacToe.PLAYER_TWO:
-            return 1
-        else:
-            return 0
+        return self.__judge.get_winner()
 
     def minimax_minimizing_player(self):
         if self.__judge.is_game_finished():
