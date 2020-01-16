@@ -1,7 +1,6 @@
 import math
 
 from TicTacToe import TicTacToe
-from TicTacToeJudge import TicTacToeJudge
 
 
 class TicTacToeAI(TicTacToe):
@@ -9,7 +8,6 @@ class TicTacToeAI(TicTacToe):
         super().__init__()
         if board is not None:
             self.board = board
-            self.judge = TicTacToeJudge(self.board)
 
     def ai_move(self):
         row, col = self.get_next_move_cell()
@@ -33,7 +31,7 @@ class TicTacToeAI(TicTacToe):
         return pos
 
     def minimax_maximizing_player(self):
-        if self.judge.is_game_finished():
+        if self._is_game_finished():
             return self.get_weight()
 
         max_eval = -math.inf
@@ -49,10 +47,10 @@ class TicTacToeAI(TicTacToe):
         return max_eval
 
     def get_weight(self):
-        return self.judge.get_winner()
+        return self._get_winner()
 
     def minimax_minimizing_player(self):
-        if self.judge.is_game_finished():
+        if self._is_game_finished():
             return self.get_weight()
 
         min_eval = math.inf
