@@ -16,12 +16,11 @@ class TicTacToeAI(TicTacToe):
     def __get_next_move_cell(self):
         max_ = -math.inf
         pos = None
-
         alpha = -math.inf
         beta = math.inf
 
-        for row in range(len(self._board)):
-            for col in range(len(self._board[row])):
+        for row in range(self._board_size):
+            for col in range(self._board_size):
                 if self._board[row][col] != 0:
                     continue
 
@@ -43,8 +42,8 @@ class TicTacToeAI(TicTacToe):
             return self.__get_weight()
 
         max_eval = -math.inf
-        for row in range(len(self._board)):
-            for col in range(len(self._board[row])):
+        for row in range(self._board_size):
+            for col in range(self._board_size):
                 if self._board[row][col] != 0:
                     continue
 
@@ -74,8 +73,8 @@ class TicTacToeAI(TicTacToe):
             return self.__get_weight()
 
         min_eval = math.inf
-        for row in range(len(self._board)):
-            for col in range(len(self._board[row])):
+        for row in range(self._board_size):
+            for col in range(self._board_size):
                 if self._board[row][col] != 0:
                     continue
 
