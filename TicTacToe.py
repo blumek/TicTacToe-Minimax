@@ -16,7 +16,7 @@ class TicTacToe:
         self.__player_two_sign = player_two_sign
         self.__empty_cell_sign = empty_cell_sign
 
-        self.__turn = self._Board.PLAYER_ONE
+        self._turn = self._Board.PLAYER_ONE
 
     @property
     def board(self):
@@ -46,7 +46,7 @@ class TicTacToe:
         if not self._is_empty_cell(row, col):
             raise Exception('The cell is already taken.')
 
-        self._board[row][col] = self.__turn
+        self._board[row][col] = self._turn
         if not self.__is_any_winner():
             self.__change_player_turn()
 
@@ -54,7 +54,7 @@ class TicTacToe:
         return self._board[row][col] == self._Board.EMPTY_CELL
 
     def __change_player_turn(self):
-        self.__turn *= -1
+        self._turn *= -1
 
     def winner(self):
         winner = self._get_winner()

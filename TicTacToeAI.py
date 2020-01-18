@@ -9,29 +9,39 @@ class TicTacToeAI(TicTacToe):
         if board is not None:
             self._board = board
 
+    def move(self, row, col):
+        if self._turn != self._Board.PLAYER_TWO:
+            raise Exception("Currently it is computer's turn. Player cannot make a move now.")
+
+        super().move(row, col)
+
     def ai_move(self):
+        if self._turn != self._Board.PLAYER_ONE:
+            raise Exception("Currently it is player's turn. Computer cannot make a move now.")
+
         row, col = self.__get_next_move_cell()
-        self.move(row, col)
+        super().move(row, col)
 
     def __get_next_move_cell(self):
-        max_ = -math.inf
+        max_weight = -math.inf
         pos = None
         alpha = -math.inf
         beta = math.inf
 
         for row in range(self._board_size):
             for col in range(self._board_size):
-                if self._board[row][col] != 0:
+                if not self._is_empty_cell(row, col):
                     continue
 
-                self._board[row][col] = 1
-                eval_ = self.__minimizing_player(alpha, beta)
-                self._board[row][col] = 0
-                if eval_ > max_:
-                    max_ = eval_
+                self._board[row][col] = self._Board.PLAYER_ONE
+                weight = self.__minimizing_player(alpha, beta)
+                self._board[row][col] = self._Board.EMPTY_CELL
+
+                if weight > max_weight:
+                    max_weight = weight
                     pos = row, col
 
-                alpha = max(alpha, eval_)
+                alpha = max(alpha, weight)
                 if beta <= alpha:
                     return pos
 
@@ -41,21 +51,22 @@ class TicTacToeAI(TicTacToe):
         if self._is_game_finished():
             return self.__get_weight()
 
-        max_eval = -math.inf
+        max_weight = -math.inf
         for row in range(self._board_size):
             for col in range(self._board_size):
-                if self._board[row][col] != 0:
+                if not self._is_empty_cell(row, col):
                     continue
 
                 self._board[row][col] = self._Board.PLAYER_ONE
-                eval_ = self.__minimizing_player(alpha, beta)
-                self._board[row][col] = 0
-                max_eval = max(max_eval, eval_)
-                alpha = max(alpha, eval_)
-                if beta <= alpha:
-                    return max_eval
+                weight = self.__minimizing_player(alpha, beta)
+                self._board[row][col] = self._Board.EMPTY_CELL
 
-        return max_eval
+                max_weight = max(max_weight, weight)
+                alpha = max(alpha, weight)
+                if beta <= alpha:
+                    return max_weight
+
+        return max_weight
 
     def __get_weight(self):
         return self._get_winner() * self.__count_empty_cells()
@@ -72,18 +83,19 @@ class TicTacToeAI(TicTacToe):
         if self._is_game_finished():
             return self.__get_weight()
 
-        min_eval = math.inf
+        min_weight = math.inf
         for row in range(self._board_size):
             for col in range(self._board_size):
-                if self._board[row][col] != 0:
+                if not self._is_empty_cell(row, col):
                     continue
 
                 self._board[row][col] = self._Board.PLAYER_TWO
-                eval_ = self.__maximizing_player(alpha, beta)
-                self._board[row][col] = 0
-                min_eval = min(min_eval, eval_)
-                beta = min(beta, eval_)
-                if beta <= alpha:
-                    return min_eval
+                weight = self.__maximizing_player(alpha, beta)
+                self._board[row][col] = self._Board.EMPTY_CELL
 
-        return min_eval
+                min_weight = min(min_weight, weight)
+                beta = min(beta, weight)
+                if beta <= alpha:
+                    return min_weight
+
+        return min_weight
